@@ -75,12 +75,12 @@ bool ObjectFinder::find_toy_block(float surface_height, geometry_msgs::PoseStamp
     //bool valid_plane;
     Eigen::Vector3f major_axis;
     Eigen::Vector3f centroid;
-    bool found_object = true; //should verify this
+    bool found_object; //should verify this
     double block_height = 0.035; //this height is specific to the TOY_BLOCK model
     //if insufficient points in plane, find_plane_fit returns "false"
     //should do more sanity testing on found_object status
     //hard-coded search bounds based on a block of width 0.035
-    found_object = pclUtils_.find_plane_fit(0.4, 1, -0.5, 0.5, surface_height + 0.025, surface_height + 0.045, 0.001,
+    found_object = pclUtils_.find_plane_fit(.5, 1, -0.5, 0.5, surface_height + 0.025, surface_height + 0.045, 0.001,
             plane_normal, plane_dist, major_axis, centroid);
     // need more here, if want to distinguish different types of blocks;
     // write a new pclUtils fnc for this. Then set:
@@ -153,7 +153,7 @@ void ObjectFinder::executeCB(const actionlib::SimpleActionServer<object_finder::
         ros::Time tstart = ros::Time::now();
         double table_ht;
         //hard-coded search range: x= [0,1], y= [-0.5,0.5], z=[0.6,1.2] in steps of 0.005
-        table_ht = pclUtils_.find_table_height(0.0, 1, -0.5, 0.5, 0.6, 1.2, 0.005);
+        table_ht = pclUtils_.find_table_height(0.5, 1, -0.5, 0.5, -.3, .3, 0.005);
         ROS_INFO("table ht: %f", table_ht);
         ros::Time t3 = ros::Time::now();
         surface_height_ = table_ht; //remember this value for potential future use
@@ -234,7 +234,7 @@ int main(int argc, char** argv) {
             //The direction of the transform returned will be from the target_frame to the source_frame. 
             //Which if applied to data, will transform data in the source_frame into the target_frame. 
             //See tf/CoordinateFrameConventions#Transform_Direction
-            tfListener.lookupTransform("base_link", "kinect_pc_frame", ros::Time(0), stf_kinect_wrt_base);
+            tfListener.lookupTransform("base", "camera_rgb_optical_frame", ros::Time(0), stf_kinect_wrt_base);
         } catch (tf::TransformException &exception) {
             ROS_WARN("%s; retrying...", exception.what());
             tferr = true;
