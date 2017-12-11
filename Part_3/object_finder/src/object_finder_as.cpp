@@ -27,7 +27,7 @@ private:
 
     //specialized function to find an upright Coke can on known height of horizontal surface;
     // returns true/false for found/not-found, and if found, fills in the object pose
-    bool find_upright_coke_can(float surface_height, geometry_msgs::PoseStamped &object_pose);
+    //bool find_upright_coke_can(float surface_height, geometry_msgs::PoseStamped &object_pose);
     bool find_toy_block(float surface_height, geometry_msgs::PoseStamped &object_pose);
     float find_table_height();
     double surface_height_;
@@ -55,7 +55,7 @@ object_finder_as_(nh_, "object_finder_action_service", boost::bind(&ObjectFinder
 
 //specialized function: DUMMY...JUST RETURN A HARD-CODED POSE; FIX THIS
 
-bool ObjectFinder::find_upright_coke_can(float surface_height, geometry_msgs::PoseStamped &object_pose) {
+/*bool ObjectFinder::find_upright_coke_can(float surface_height, geometry_msgs::PoseStamped &object_pose) {
     bool found_object = true;
     object_pose.header.frame_id = "world";
     object_pose.pose.position.x = 0.680;
@@ -67,7 +67,7 @@ bool ObjectFinder::find_upright_coke_can(float surface_height, geometry_msgs::Po
     object_pose.pose.orientation.w = 1;
     return found_object;
 
-}
+}*/
 
 bool ObjectFinder::find_toy_block(float surface_height, geometry_msgs::PoseStamped &object_pose) {
     Eigen::Vector3f plane_normal;
@@ -163,7 +163,7 @@ void ObjectFinder::executeCB(const actionlib::SimpleActionServer<object_finder::
     //note--finder might change this ID, if warranted
 
     switch (object_id) {
-        case ObjectIdCodes::COKE_CAN_UPRIGHT:
+       /* case ObjectIdCodes::COKE_CAN_UPRIGHT:
             //specialized function to find an upright Coke can on a horizontal surface of known height:
             found_object = find_upright_coke_can(surface_height, object_pose); //special case for Coke can;
             if (found_object) {
@@ -175,7 +175,7 @@ void ObjectFinder::executeCB(const actionlib::SimpleActionServer<object_finder::
                 ROS_WARN("could not find requested object");
                 object_finder_as_.setAborted(result_);
             }
-            break;
+            break;*/
         case ObjectIdCodes::TOY_BLOCK_ID:
             //specialized function to find toy block model
             found_object = find_toy_block(surface_height, object_pose); //special case for toy block
